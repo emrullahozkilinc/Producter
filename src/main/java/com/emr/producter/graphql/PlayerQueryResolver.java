@@ -1,8 +1,8 @@
 package com.emr.producter.graphql;
 
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.emr.producter.entity.Player;
 import com.emr.producter.repo.PlayerRepository;
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
