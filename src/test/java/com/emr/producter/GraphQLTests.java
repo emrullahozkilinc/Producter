@@ -6,13 +6,17 @@ import com.emr.producter.repo.PlayerRepository;
 import com.graphql.spring.boot.test.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.*;
 
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-@GraphQLTest
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DataJpaTest
 public class GraphQLTests {
 
     @Autowired
@@ -26,13 +30,9 @@ public class GraphQLTests {
 
     @Test
     public void testAddPlayer() throws IOException {
-        doReturn(player1).when(playerRepository).save(player1);
-        GraphQLResponse res = graphQLTestTemplate.perform("addPlayer.graphql",
-                "{ " +
-                "addPlayer(name: \"John\", " +
-                          "surname: \"Doe\", " +
-                          "position: \"SF\") " +
-                        "{ name surname position } }");
-        assertThat(res.get("$.data")).isEqualTo("{ \"addPlayer\": { \"name\": \"John\", \"surname\": \"Doe\", \"position\": \"SF\" } }");
+        doReturn(player1).when(playerRepository).save(any(Player.class));
+        GraphQLResponse res = graphQLTestTemplate.postForResource("graphql/addPlayer.graphql");
+        assertThat(res.isOk()).isTrue();
+        assertThat(res.get("$.data.addPlayer", Player.class)).isEqualTo(player1);
     }
 }

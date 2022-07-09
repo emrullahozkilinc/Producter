@@ -1,0 +1,8 @@
+mutation {
+    addPlayer(dtoPlayer: {name: "John", surname: "Doe", position: SF}){
+        name
+        surname
+        position
+    }
+}
+
